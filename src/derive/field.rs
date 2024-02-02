@@ -433,11 +433,8 @@ macro_rules! field_arithmetic {
             #[unroll::unroll_for_loops]
             #[allow(unused_assignments)]
             pub const fn mul(&self, rhs: &Self) -> Self {
-                // Fast Coarsely Integrated Operand Scanning (CIOS) as described
-                // in Algorithm 2 of EdMSM: https://eprint.iacr.org/2022/1400.pdf
-                // Cannot use the fast version (algorithm 2) if
-                // modulus_high_word >= (D-1) / 2 - 1 = (2^64-1)/2 - 1.
-                // Experimentally max savings on ARM were 0-4%.
+                // Coarsely Integrated Operand Scanning (CIOS) as described
+                // in Algorithm 1 of EdMSM: https://eprint.iacr.org/2022/1400.pdf
 
                 if $modulus.0[3] <= (u64::MAX / 2) - 1 {
                     let mut t: [u64; 4] = [0u64; 4];
